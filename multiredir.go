@@ -8,7 +8,6 @@ import (
 	"net"
 	"os"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/artyom/autoflags"
@@ -61,11 +60,8 @@ func handleConn(conn net.Conn, addr string, verbose bool, timeout time.Duration)
 		return
 	}
 	defer remote.Close()
-	var wg sync.WaitGroup
-	wg.Add(2)
-	go func() { io.Copy(conn, remote); wg.Done() }()
-	go func() { io.Copy(remote, conn); wg.Done() }()
-	wg.Wait()
+	go io.Copy(conn, remote)
+	io.Copy(remote, conn)
 }
 
 type redir struct {
