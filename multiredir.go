@@ -21,10 +21,7 @@ func main() {
 	}{
 		Timeout: 5 * time.Second,
 	}
-	if err := autoflags.Define(&config); err != nil {
-		log.Fatal(err)
-	}
-	flag.Parse()
+	autoflags.Parse(&config)
 	if len(config.Redirs) == 0 {
 		flag.Usage()
 		os.Exit(1)
